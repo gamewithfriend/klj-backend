@@ -7,7 +7,7 @@ spring:
             client-name: "naver"
             client-id: "pgt2BNNA4D0k6A7HSJUB"
             client-secret: "ldfb9IOCYM"
-            redirect-uri: "http://localhost:3000/login/callback/naver"
+            redirect-uri: "http://localhost/login/callback/naver"
             authorization-grant-type: "authorization_code"
             scope:
               - email
