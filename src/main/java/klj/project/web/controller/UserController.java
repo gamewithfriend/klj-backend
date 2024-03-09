@@ -29,7 +29,10 @@ public class UserController {
                     .buildWith(null);
         }catch (Exception e){
             log.info(e.toString());
-            return KljResponse.create().fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러")).buildWith(null);
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
+                    .buildWith(null);
         }
     }
 }
