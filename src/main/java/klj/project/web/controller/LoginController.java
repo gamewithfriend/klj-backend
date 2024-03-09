@@ -41,11 +41,17 @@ public class LoginController {
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDto.getAccessToken());
 
-                return KljResponse.create().succeed().buildWith(tokenDto);
+                return KljResponse
+                        .create()
+                        .succeed()
+                        .buildWith(tokenDto);
 
             }catch (Exception e){
                 log.info(e.toString());
-                return KljResponse.create().fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러")).buildWith(null);
+                return KljResponse
+                        .create()
+                        .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
+                        .buildWith(null);
             }
 
     }
