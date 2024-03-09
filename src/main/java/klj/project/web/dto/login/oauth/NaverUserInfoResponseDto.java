@@ -1,4 +1,4 @@
-package klj.project.web.dto.Login.oauth;
+package klj.project.web.dto.login.oauth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package klj.project.web.dto.Login.oauth;
+package klj.project.web.dto.login.oauth;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

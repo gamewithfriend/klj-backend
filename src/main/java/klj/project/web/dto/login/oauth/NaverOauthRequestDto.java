@@ -1,4 +1,4 @@
-package klj.project.web.dto.Login.oauth;
+package klj.project.web.dto.login.oauth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
