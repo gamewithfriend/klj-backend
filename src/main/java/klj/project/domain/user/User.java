@@ -19,8 +19,10 @@ public class User {
 
     private String oauthId;
 
+    @Enumerated(EnumType.STRING)
     private OauthType oauthType;
 
+    @Enumerated(EnumType.STRING)
     private Authority authority;
 
     private String nickName;

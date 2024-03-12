@@ -38,9 +38,6 @@ public class LoginController {
                 // 내부 JwtToken 발급
                 TokenDto tokenDto = loginService.authorize(user);
 
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDto.getAccessToken());
-
                 return KljResponse
                         .create()
                         .succeed()
