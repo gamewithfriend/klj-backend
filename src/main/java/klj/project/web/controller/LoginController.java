@@ -22,34 +22,66 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login/callback/naver")
-    @CrossOrigin("http://localhost:3000")
     public KljResponse<TokenDto> getNaverAuth(@RequestBody NaverOauthRequestDto naverOauthRequestDto) {
 
-            try {
-                String code =naverOauthRequestDto.getCode();
-                String state =naverOauthRequestDto.getState();
+        try {
+            String code =naverOauthRequestDto.getCode();
+            String state =naverOauthRequestDto.getState();
 
-                // 네이버 AccessToken 받아오기
-                OauthTokenDto oauthTokenDto = loginService.getNaverAccessToken(code,state);
-                // 네이버 AccessToken으로 네이버 ID값 (순수 pk값 ID 이메일주소 아님) 받아오기
-                String oauthId = loginService.getNaverInfo(oauthTokenDto);
-                // 네이버 로그인 로직 타기
-                User user = loginService.userNaverLogin(oauthId);
-                // 내부 JwtToken 발급
-                TokenDto tokenDto = loginService.authorize(user);
+            // 네이버 AccessToken 받아오기
+            OauthTokenDto oauthTokenDto = loginService.getNaverAccessToken(code,state);
+            log.info("oauthTokenDto: {}", oauthTokenDto);
+            // 네이버 AccessToken으로 네이버 ID값 (순수 pk값 ID 이메일주소 아님) 받아오기
+            String oauthId = loginService.getNaverInfo(oauthTokenDto);
+            // 네이버 로그인 로직 타기
+            User user = loginService.userNaverLogin(oauthId);
+            // 내부 JwtToken 발급
+            TokenDto tokenDto = loginService.authorize(user);
 
-                return KljResponse
-                        .create()
-                        .succeed()
-                        .buildWith(tokenDto);
+            return KljResponse
+                    .create()
+                    .succeed()
+                    .buildWith(tokenDto);
 
-            }catch (Exception e){
-                log.info(e.toString());
-                return KljResponse
-                        .create()
-                        .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
-                        .buildWith(null);
-            }
+        }catch (Exception e){
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
+                    .buildWith(null);
+        }
+
+    }
+
+    @PostMapping("/login/callback/kakao")
+    public KljResponse<TokenDto> getKakaoAuth(@RequestBody NaverOauthRequestDto naverOauthRequestDto) {
+
+        try {
+            String code =naverOauthRequestDto.getCode();
+            String state =naverOauthRequestDto.getState();
+
+            // 카카오 AccessToken 받아오기
+            OauthTokenDto oauthTokenDto = loginService.getKakaoAccessToken(code,state);
+            // 카카오 AccessToken으로 카카오 ID값 (순수 pk값 ID 이메일주소 아님) 받아오기
+            String oauthId = loginService.getKakaoInfo(oauthTokenDto);
+            // 카카오 로그인 로직 타기
+            User user = loginService.userKakaoLogin(oauthId);
+            // 내부 JwtToken 발급
+            TokenDto tokenDto = loginService.authorize(user);
+
+
+            return KljResponse
+                    .create()
+                    .succeed()
+                    .buildWith(tokenDto);
+
+        }catch (Exception e){
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
+                    .buildWith(null);
+        }
 
     }
 }

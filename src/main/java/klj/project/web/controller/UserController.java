@@ -24,9 +24,8 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    @Operation(summary = "개인정보 확인", description = "todo: implementation")
+    @Operation(summary = "로그인 유저 개인정보 확인", description = "todo: implementation")
     @GetMapping(path = "/user/info", produces = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin("http://localhost:3000")
     public KljResponse<UserLoginDto> userLoginDto(Authentication authentication) {
         try {
             User user = (User) authentication.getPrincipal();
