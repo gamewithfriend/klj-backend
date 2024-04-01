@@ -1,5 +1,9 @@
 package klj.project.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import klj.project.domain.user.Authority;
 import klj.project.domain.user.OauthType;
 import klj.project.domain.user.User;
@@ -8,11 +12,13 @@ import klj.project.jwt.TokenProvider;
 import klj.project.repository.UserQuerydslRepository;
 import klj.project.repository.UserRepository;
 import klj.project.web.dto.login.jwt.TokenDto;
+import klj.project.web.dto.login.oauth.IdTokenDto;
 import klj.project.web.dto.login.oauth.NaverInfoResponseDto;
 import klj.project.web.dto.login.oauth.OauthTokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,8 +27,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 
 @RequiredArgsConstructor
@@ -34,8 +42,14 @@ public class LoginService {
     @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     private String naverClientId;
 
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String kakaoClientId;
+
     @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
     private String naverClientSecret;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String kakaoRedirectUri;
 
     private final WebClient webClient;
 
@@ -107,4 +121,58 @@ public class LoginService {
         log.info("jwt: {}", jwt);
         return new TokenDto(jwt);
     }
+
+    public OauthTokenDto getKakaoAccessToken(String code, String state){
+        URI uri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/token?grant_type=authorization_code")
+                .queryParam("client_id", kakaoClientId)
+                .queryParam("redirect_uri", kakaoRedirectUri)
+                .queryParam("code", code)
+                .build()
+                .toUri();
+
+        Mono<OauthTokenDto> responseOauthTokenDtoMono = webClient.post()
+                .uri(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(OauthTokenDto.class);
+
+        OauthTokenDto oauthTokenDto = responseOauthTokenDtoMono.block();
+
+        log.info("Kakao Access Token Response: {}", oauthTokenDto);
+        log.info("Kakao Access Token Response: {}", oauthTokenDto.getAccess_token().toString());
+        return oauthTokenDto;
+    }
+
+    public String getKakaoInfo(OauthTokenDto oauthTokenDto) throws IOException {
+        // JWT 디코딩
+        String[] jwtParts = oauthTokenDto.getId_token().split("\\.");
+        String payload = jwtParts[1];
+
+        // Base64 디코딩
+        byte[] decodedBytes = Base64.getDecoder().decode(payload);
+        String decodedPayload = new String(decodedBytes);
+        
+        // IdTokenDto로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        IdTokenDto idTokenDto =  objectMapper.readValue(decodedPayload, IdTokenDto.class);
+        
+
+        log.info("Kakao info response: {}", idTokenDto.getSub());
+        return idTokenDto.getSub();
+    }
+
+    public User userKakaoLogin(String oauthId){
+        User user = userQuerydslRepository.findByOauthIdAndOauthType(oauthId, OauthType.kakao);
+
+        if(user == null){
+            long count = userRepository.count();
+            User saveUser = User.createUser(oauthId, OauthType.kakao, Authority.user, "피트니스새싹" + count);
+            userRepository.save(saveUser);
+            user = saveUser;
+        }
+
+        log.info("user info response: {}", user);
+        return user;
+    }
+
 }

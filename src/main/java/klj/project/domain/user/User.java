@@ -27,6 +27,10 @@ public class User {
 
     private String nickName;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id")
+    private Trainer trainer;
+
     @Builder
     public User(String oauthId, OauthType oauthType, Authority authority, String nickName) {
         this.oauthId = oauthId;
@@ -43,4 +47,15 @@ public class User {
                 .nickName(nickName)
                 .build();
     }
+
+    public User applyTrainer (Trainer trainer){
+        this.trainer = trainer;
+        return this;
+    }
+
+    public User changeNickName (String nickName){
+        this.nickName = nickName;
+        return this;
+    }
+
 }
