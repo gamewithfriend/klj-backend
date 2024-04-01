@@ -24,17 +24,18 @@ public class Code implements Persistable<String> {
     private String name;
     private String description;
     private Long depth;
-
+    private Long codeOrder;
 
     @CreatedDate
     private LocalDateTime createdDate;
 
-    public Code(String id, String name, String description, Long depth, CodeParent codeParent) {
+    public Code(String id, String name, String description, Long depth, CodeParent codeParent, Long codeOrder) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.depth = depth;
         this.codeParent = codeParent;
+        this.codeOrder = codeOrder;
     }
 
     @Override
