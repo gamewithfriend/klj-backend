@@ -17,7 +17,7 @@ public class CodeQuerydslRepository {
 
     public List<CodeDto> findByCodeId (String codeParentId){
 
-        List<CodeDto> codeList =  queryFactory
+        List<CodeDto> codeList = queryFactory
                 .select(Projections.fields(CodeDto.class,
                         QCode.code.name,
                         QCode.code.id

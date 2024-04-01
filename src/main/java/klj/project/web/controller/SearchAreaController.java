@@ -24,7 +24,6 @@ import java.util.List;
 public class SearchAreaController {
 
     private final CodeService codeService;
-    @Operation(summary = "유저 Trainer 신청", description = "todo: implementation")
     @PostMapping(path="/search/area" , produces = MediaType.APPLICATION_JSON_VALUE)
     public KljResponse<List<CodeDto>> getArea(@RequestBody CodeRequestDto codeRequestDto){
         try {
