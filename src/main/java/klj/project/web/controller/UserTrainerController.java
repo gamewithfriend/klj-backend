@@ -50,7 +50,7 @@ public class UserTrainerController {
         }
     }
 
-    @Operation(summary = "유저 Trainer 신청", description = "todo: implementation")
+    @Operation(summary = "유저 Trainer 신청정보", description = "todo: implementation")
     @GetMapping(path = "/user/trainer/applyInfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public KljResponse<UserTrainerResponseDto> userApplyInfo(Authentication authentication) {
         try {
@@ -59,7 +59,7 @@ public class UserTrainerController {
             log.info("loginUser.getTrainer(): {}", loginUser.getTrainer());
             if(loginUser.getTrainer() !=null){
                 Trainer trainer = loginUser.getTrainer();
-                UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(), trainer.getTrainPlace(), trainer.getTrainerApplyFlag());
+                UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(),trainer.getEmail(), trainer.getTrainPlace(), trainer.getTrainerApplyFlag());
                 return KljResponse.create()
                         .succeed()
                         .buildWith(userTrainerResponseDto);

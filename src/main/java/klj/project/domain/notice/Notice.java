@@ -34,24 +34,28 @@ public class Notice {
 
     private boolean readFlag;
 
+    private boolean deleteFlag;
+
     @CreatedDate
     private LocalDateTime createdDate;
 
     @Builder
-    public Notice(User receiveUser, User sendUser, NoticeType noticeType, Boolean readFlag, LocalDateTime createdDate) {
+    public Notice(User receiveUser, User sendUser, NoticeType noticeType, Boolean readFlag, Boolean deleteFlag, LocalDateTime createdDate) {
         this.receiveUser = receiveUser;
         this.sendUser = sendUser;
         this.noticeType = noticeType;
         this.readFlag = readFlag;
+        this.deleteFlag = deleteFlag;
         this.createdDate = createdDate;
     }
 
-    public static  Notice createNotice (User receiveUser, User sendUser, NoticeType noticeType, Boolean readFlag, LocalDateTime createdDate){
+    public static  Notice createNotice (User receiveUser, User sendUser, NoticeType noticeType, Boolean readFlag, Boolean deleteFlag, LocalDateTime createdDate){
         return Notice.builder()
                 .receiveUser(receiveUser)
                 .sendUser(sendUser)
                 .noticeType(noticeType)
                 .readFlag(readFlag)
+                .deleteFlag(deleteFlag)
                 .createdDate(createdDate)
                 .build();
     }

@@ -9,6 +9,7 @@ public class UserTrainerResponseDto {
     private Long id;
     private String employmentHistoryPeriod;
     private String phoneNumber;
+    private String email;
     private String trainPlace;
     private Boolean trainerApplyFlag;
 }
