@@ -6,7 +6,7 @@ import klj.project.service.NoticeService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class sendInnerNoticeAdmin implements StrageyNoticeInner{
+public class SendInnerNoticeAdmin implements StrageyNoticeInner{
 
     private final NoticeService noticeService;
 
