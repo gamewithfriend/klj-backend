@@ -3,6 +3,7 @@ package klj.project.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import klj.project.domain.notice.Notice;
 import klj.project.domain.user.User;
+import klj.project.repository.UserRepository;
 import klj.project.service.LoginService;
 import klj.project.service.NoticeService;
 import klj.project.web.dto.Error;
@@ -24,13 +25,17 @@ import java.util.List;
 public class NoticeController {
 
     private final NoticeService noticeService;
+    private final UserRepository userRepository;
+
+
     @Operation(summary = "로그인 유저 알림 리스트", description = "todo: implementation")
     @GetMapping(path = "/notice/user", produces = MediaType.APPLICATION_JSON_VALUE)
     public KljResponse<UserLoginDto> getUserNoticeList(Authentication authentication) {
         try {
 
             User user = (User) authentication.getPrincipal();
-            Long loginUserId = user.getId();
+            User loginUser = userRepository.findByOauthId(user.getOauthId()).get();
+            Long loginUserId = loginUser.getId();
             List<Notice> userNoticeList = noticeService.getUserNoticeList(loginUserId);
 
             return KljResponse.create()
@@ -51,7 +56,8 @@ public class NoticeController {
         try {
 
             User user = (User) authentication.getPrincipal();
-            Long loginUserId = user.getId();
+            User loginUser = userRepository.findByOauthId(user.getOauthId()).get();
+            Long loginUserId = loginUser.getId();
             Long userUnReadNoticeCount = noticeService.getUserUnReadNoticeCount(loginUserId);
 
             return KljResponse.create()
