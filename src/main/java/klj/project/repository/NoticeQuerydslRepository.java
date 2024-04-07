@@ -8,6 +8,7 @@ import klj.project.domain.notice.QNotice;
 import klj.project.domain.user.OauthType;
 import klj.project.domain.user.QUser;
 import klj.project.domain.user.User;
+import klj.project.web.dto.notice.NoticeListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -22,17 +23,19 @@ public class NoticeQuerydslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Notice> findByUserIdGetNoticeList (Long userId){
+    public List<NoticeListDto> findByUserIdGetNoticeList (Long userId){
 
-        List<Notice> noticeList =  queryFactory
-                .select(Projections.fields(Notice.class,
+        List<NoticeListDto> noticeList =  queryFactory
+                .select(Projections.fields(NoticeListDto.class,
                         notice.id,
-                        notice.receiveUser.nickName,
-                        notice.sendUser.nickName,
+                        notice.receiveUser.nickName.as("receiverNickName"),
+                        notice.sendUser.nickName.as("senderNickName"),
                         notice.createdDate,
-                        notice.readFlag,
                         notice.noticeType,
-                        code.description
+                        code.name,
+                        code.description,
+                        notice.receiveUser.id.as("receiverId"),
+                        notice.sendUser.id.as("senderId")
                 )).from(notice, code)
                 .where(notice.receiveUser.id.eq(userId)
                         , notice.deleteFlag.eq(false)
