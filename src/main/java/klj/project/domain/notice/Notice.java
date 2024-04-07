@@ -59,4 +59,5 @@ public class Notice {
                 .createdDate(createdDate)
                 .build();
     }
+
 }
