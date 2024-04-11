@@ -40,6 +40,7 @@ public class NoticeQuerydslRepository {
                 .where(notice.receiveUser.id.eq(userId)
                         , notice.deleteFlag.eq(false)
                         , code.id.eq(notice.noticeType.stringValue()))
+                .orderBy(notice.id.desc())
                 .fetch();
         return noticeList;
     }

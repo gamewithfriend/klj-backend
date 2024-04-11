@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +48,9 @@ public class NoticeService {
                     , userNoticeDtoList.get(i).getSenderNickName()
                     , userNoticeDtoList.get(i).getName()
                     , userNoticeDtoList.get(i).getReceiverNickName() + userNoticeDtoList.get(i).getDescription()
-                    , userNoticeDtoList.get(i).getCreatedDate()
+                    , userNoticeDtoList.get(i).getCreatedDate().format(
+                        DateTimeFormatter.ofPattern("MM월dd일HH시mm분")
+                    )
                     , userNoticeDtoList.get(i).getReceiverId()
                     , userNoticeDtoList.get(i).getSenderId()
             );

@@ -14,7 +14,7 @@ public class NoticeListResponseDto {
     private String senderNickName;
     private String title;
     private String content;
-    private LocalDateTime createdDate;
+    private String createdDate;
     private Long receiverId;
     private Long senderId;
 
