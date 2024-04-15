@@ -12,6 +12,7 @@ import klj.project.web.dto.notice.NoticeListDto;
 import klj.project.web.dto.notice.NoticeListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -64,6 +65,27 @@ public class NoticeController {
             return KljResponse.create()
                     .succeed()
                     .buildWith(noticeList);
+        }catch (Exception e){
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
+                    .buildWith(null);
+        }
+    }
+    @Operation(summary = "유저 알림 읽기처리", description = "User read Notice ")
+    @PutMapping(path = "/notice/user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public KljResponse<Long> readAlarm(Authentication authentication) {
+        try {
+
+            User user = (User) authentication.getPrincipal();
+            User loginUser = userRepository.findByOauthId(user.getOauthId()).get();
+            Long loginUserId = loginUser.getId();
+            noticeService.readNotice(loginUserId);
+
+            return KljResponse.create()
+                    .succeed()
+                    .buildWith(null);
         }catch (Exception e){
             log.info(e.toString());
             return KljResponse

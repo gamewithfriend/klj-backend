@@ -68,8 +68,9 @@ public class NoticeService {
         noticeQuerydslRepository.deleteNotice(noticeList);
     }
 
-    public void readNotice(List<Long> noticeList){
-        noticeQuerydslRepository.readNotice(noticeList);
+    public void readNotice(Long userId){
+        List<Long> unReadNoticeList = noticeQuerydslRepository.findByUserIdGetUnReadNoticeList(userId);
+        noticeQuerydslRepository.readNotice(unReadNoticeList);
     }
 
 }

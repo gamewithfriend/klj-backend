@@ -57,6 +57,18 @@ public class NoticeQuerydslRepository {
         return unReadNoticeCount;
     }
 
+    public List<Long> findByUserIdGetUnReadNoticeList (Long userId){
+
+        List<Long> unReadNoticeList =  queryFactory
+                .select(notice.id
+                ).from(notice)
+                .where(notice.receiveUser.id.eq(userId)
+                        , notice.deleteFlag.eq(false)
+                        , notice.readFlag.eq(false))
+                .fetch();
+        return unReadNoticeList;
+    }
+
     public void deleteNotice (List<Long> noticeList){
         queryFactory
                 .update(notice)
