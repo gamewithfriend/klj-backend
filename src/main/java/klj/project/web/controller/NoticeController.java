@@ -7,6 +7,7 @@ import klj.project.repository.UserRepository;
 import klj.project.service.NoticeService;
 import klj.project.web.dto.Error;
 import klj.project.web.dto.KljResponse;
+import klj.project.web.dto.notice.NoticeListDeleteRequestDto;
 import klj.project.web.dto.notice.NoticeListDto;
 import klj.project.web.dto.notice.NoticeListResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +15,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class NoticeController {
 
     private final NoticeService noticeService;
@@ -42,6 +45,25 @@ public class NoticeController {
             return KljResponse.create()
                     .succeed()
                     .buildWith(noticeListResponseDtoList);
+        }catch (Exception e){
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
+                    .buildWith(null);
+        }
+    }
+
+    @Operation(summary = "로그인 유저 알림 삭제 ", description = "todo: implementation")
+    @DeleteMapping(path = "/notice/user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public KljResponse<List<Long>> deleteUserNotice(@RequestParam(required = false) List<Long> noticeList) {
+        try {
+
+            noticeService.deleteNotice(noticeList);
+
+            return KljResponse.create()
+                    .succeed()
+                    .buildWith(noticeList);
         }catch (Exception e){
             log.info(e.toString());
             return KljResponse
@@ -72,4 +94,6 @@ public class NoticeController {
                     .buildWith(null);
         }
     }
+
+
 }
