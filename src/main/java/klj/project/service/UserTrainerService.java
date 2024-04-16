@@ -28,21 +28,23 @@ public class UserTrainerService {
     public UserTrainerResponseDto userTrainerApply(User loginUser, UserTrainerAppplyDto userTrainerApplyDto){
         String employmentHistoryPeriod = userTrainerApplyDto.getEmploymentHistoryPeriod();
         String trainPlace = userTrainerApplyDto.getTrainPlace();
+        String trainPlaceDetail = userTrainerApplyDto.getTrainPlaceDetail();
+        String trainPlacePostcode = userTrainerApplyDto.getTrainPlacePostcode();
         String phoneNumber = userTrainerApplyDto.getPhoneNumber();
         String email = userTrainerApplyDto.getEmail();
 
         Trainer trainer =null;
         if(loginUser.getTrainer() == null){ //트레이너 신청을 한번도 신청하지않았다면
-            trainer = Trainer.createTrainer(loginUser, employmentHistoryPeriod, trainPlace, phoneNumber, email,true);
+            trainer = Trainer.createTrainer(loginUser, employmentHistoryPeriod, trainPlace, trainPlaceDetail, trainPlacePostcode, phoneNumber, email,true);
             userTrainerRepository.save(trainer);
         }else { //트레이너 신청을 신청했다면
             trainer = loginUser.getTrainer();
-            trainer.updateTrainerProfile(employmentHistoryPeriod, trainPlace, phoneNumber, email);
+            trainer.updateTrainerProfile(employmentHistoryPeriod, trainPlace, trainPlaceDetail, trainPlacePostcode, phoneNumber, email);
             userTrainerRepository.save(trainer);
         }
 
         //UserTrainerResponseDto 변환과정
-        UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(), trainer.getEmail(), trainer.getTrainPlace(), trainer.getTrainerApplyFlag());
+        UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(), trainer.getEmail(), trainer.getTrainPlace(), trainer.getTrainPlaceDetail(), trainer.getTrainPlacePostcode(), trainer.getTrainerApplyFlag());
 
         // 유저 트레이너 변환 과정
         loginUser.applyTrainer(trainer);
