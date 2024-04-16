@@ -10,6 +10,8 @@ public class UserTrainerAppplyDto {
     private String employmentHistoryPeriod;
     private String phoneNumber;
     private String trainPlace;
+    private String trainPlaceDetail;
+    private String trainPlacePostcode;
     private String email;
 
 

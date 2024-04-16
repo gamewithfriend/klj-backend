@@ -11,5 +11,7 @@ public class UserTrainerResponseDto {
     private String phoneNumber;
     private String email;
     private String trainPlace;
+    private String trainPlaceDetail;
+    private String trainPlacePostcode;
     private Boolean trainerApplyFlag;
 }

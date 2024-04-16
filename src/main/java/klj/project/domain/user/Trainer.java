@@ -22,6 +22,10 @@ public class Trainer {
 
     private String trainPlace;
 
+    private String trainPlaceDetail;
+
+    private String trainPlacePostcode;
+
     private String phoneNumber;
 
     private String email;
@@ -29,27 +33,31 @@ public class Trainer {
     private Boolean trainerApplyFlag;
 
     @Builder
-    public Trainer(User user, String employmentHistoryPeriod, String trainPlace, String phoneNumber, String email, Boolean trainerApplyFlag) {
+    public Trainer(User user, String employmentHistoryPeriod, String trainPlace, String trainPlacePostcode, String trainPlaceDetail, String phoneNumber, String email, Boolean trainerApplyFlag) {
         this.user = user;
         this.employmentHistoryPeriod = employmentHistoryPeriod;
         this.trainPlace = trainPlace;
+        this.trainPlaceDetail = trainPlaceDetail;
+        this.trainPlacePostcode = trainPlacePostcode;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.trainerApplyFlag = trainerApplyFlag;
     }
 
-    public static  Trainer createTrainer (User user, String employmentHistoryPeriod, String trainPlace, String phoneNumber, String email, Boolean trainerApplyFlag){
+    public static  Trainer createTrainer (User user, String employmentHistoryPeriod, String trainPlace, String trainPlaceDetail, String trainPlacePostcode, String phoneNumber, String email, Boolean trainerApplyFlag){
         return Trainer.builder()
                 .user(user)
                 .employmentHistoryPeriod(employmentHistoryPeriod)
                 .trainPlace(trainPlace)
+                .trainPlaceDetail(trainPlaceDetail)
+                .trainPlacePostcode(trainPlacePostcode)
                 .phoneNumber(phoneNumber)
                 .email(email)
                 .trainerApplyFlag(trainerApplyFlag)
                 .build();
     }
 
-    public Trainer updateTrainerProfile (String employmentHistoryPeriod, String trainPlace, String phoneNumber, String email){
+    public Trainer updateTrainerProfile (String employmentHistoryPeriod, String trainPlace, String trainPlaceDetail, String trainPlacePostcode, String phoneNumber, String email){
         this.employmentHistoryPeriod = employmentHistoryPeriod;
         this.trainPlace = trainPlace;
         this.phoneNumber = phoneNumber;
