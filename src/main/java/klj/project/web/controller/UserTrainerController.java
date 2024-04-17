@@ -59,7 +59,7 @@ public class UserTrainerController {
             log.info("loginUser.getTrainer(): {}", loginUser.getTrainer());
             if(loginUser.getTrainer() !=null){
                 Trainer trainer = loginUser.getTrainer();
-                UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(),trainer.getEmail(), trainer.getTrainPlace(), trainer.getTrainPlaceDetail(), trainer.getTrainPlacePostcode(), trainer.getTrainerApplyFlag());
+                UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(),trainer.getEmail(), trainer.getTrainPlace(), trainer.getTrainPlaceDetail(), trainer.getTrainPlacePostcode(),trainer.getTrainPlaceName() ,trainer.getTrainerApplyFlag(), trainer.getTrainerAcceptFlag());
                 return KljResponse.create()
                         .succeed()
                         .buildWith(userTrainerResponseDto);

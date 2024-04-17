@@ -15,4 +15,5 @@ public class UserTrainerResponseDto {
     private String trainPlacePostcode;
     private String trainPlaceName;
     private Boolean trainerApplyFlag;
+    private Boolean trainerAcceptFlag;
 }
