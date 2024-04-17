@@ -45,7 +45,7 @@ public class UserTrainerService {
         }
 
         //UserTrainerResponseDto 변환과정
-        UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(), trainer.getEmail(), trainer.getTrainPlace(), trainer.getTrainPlaceDetail(), trainer.getTrainPlacePostcode(), trainer.getTrainPlaceName(), trainer.getTrainerApplyFlag());
+        UserTrainerResponseDto userTrainerResponseDto = new UserTrainerResponseDto(trainer.getId(), trainer.getEmploymentHistoryPeriod(), trainer.getPhoneNumber(), trainer.getEmail(), trainer.getTrainPlace(), trainer.getTrainPlaceDetail(), trainer.getTrainPlacePostcode(), trainer.getTrainPlaceName(), trainer.getTrainerApplyFlag(), trainer.getTrainerAcceptFlag());
 
         // 유저 트레이너 변환 과정
         loginUser.applyTrainer(trainer);
