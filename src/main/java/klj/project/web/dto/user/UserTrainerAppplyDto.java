@@ -12,6 +12,7 @@ public class UserTrainerAppplyDto {
     private String trainPlace;
     private String trainPlaceDetail;
     private String trainPlacePostcode;
+    private String trainPlaceName;
     private String email;
 
 

@@ -13,5 +13,6 @@ public class UserTrainerResponseDto {
     private String trainPlace;
     private String trainPlaceDetail;
     private String trainPlacePostcode;
+    private String trainPlaceName;
     private Boolean trainerApplyFlag;
 }
