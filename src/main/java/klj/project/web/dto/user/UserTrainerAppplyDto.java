@@ -13,6 +13,7 @@ public class UserTrainerAppplyDto {
     private String trainPlaceDetail;
     private String trainPlacePostcode;
     private String trainPlaceName;
+
     private String email;
 
 
