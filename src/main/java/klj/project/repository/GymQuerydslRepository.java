@@ -22,8 +22,8 @@ public class GymQuerydslRepository {
 
         List<GymLocationDto> gymList = queryFactory
                 .select(Projections.fields(GymLocationDto.class,
-                        trainer.trainPlace.as("adrress"),
-                        trainer.trainPlaceDetail.as("gymName")
+                        trainer.trainPlace.as("address"),
+                        trainer.trainPlaceName.as("gymName")
                         )).from(trainer)
                 .fetch();
         return gymList;
