@@ -13,6 +13,19 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jse368554545
+    password: rddweqrwwnauapls
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
 
 
 logging:
@@ -40,6 +53,19 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jse368554545
+    password: rddweqrwwnauapls
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
 logging.level:
   org.hibernate.SQL: debug
   com.sillimfive.mymap: debug
@@ -51,4 +77,3 @@ springdoc:
     display-request-duration: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
-
