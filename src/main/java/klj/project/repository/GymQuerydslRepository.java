@@ -24,7 +24,9 @@ public class GymQuerydslRepository {
                 .select(Projections.fields(GymLocationDto.class,
                         trainer.trainPlace.as("address"),
                         trainer.trainPlaceName.as("gymName")
-                        )).from(trainer)
+                        ))
+                .where(trainer.trainerAcceptFlag.eq(true))
+                .from(trainer)
                 .fetch();
         return gymList;
     }
