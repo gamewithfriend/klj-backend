@@ -4,6 +4,7 @@ import klj.project.repository.CodeQuerydslRepository;
 import klj.project.repository.GymQuerydslRepository;
 import klj.project.web.dto.code.CodeDto;
 import klj.project.web.dto.gym.GymLocationDto;
+import klj.project.web.dto.gym.TrainerDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,13 @@ public class GymService {
 
         return gymLocationList;
     }
+
+    public List<TrainerDTO> trainerList(){
+        List<TrainerDTO> trainerList = gymQuerydslRepository.getTrainerList();
+
+        return trainerList;
+    }
+
+
 
 }

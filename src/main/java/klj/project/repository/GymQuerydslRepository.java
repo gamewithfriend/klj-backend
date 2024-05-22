@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import klj.project.domain.user.QTrainer;
 import klj.project.web.dto.code.CodeDto;
 import klj.project.web.dto.gym.GymLocationDto;
+import klj.project.web.dto.gym.TrainerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +30,18 @@ public class GymQuerydslRepository {
                 .from(trainer)
                 .fetch();
         return gymList;
+    }
+
+    public List<TrainerDTO> getTrainerList (){
+
+        List<TrainerDTO> trainerList = queryFactory
+                .select(Projections.fields(TrainerDTO.class,
+                        trainer.trainPlace.as("trainerName"),
+                        trainer.trainPlaceName.as("gymName")
+                ))
+                .where(trainer.trainerAcceptFlag.eq(true))
+                .from(trainer)
+                .fetch();
+        return trainerList;
     }
 }

@@ -7,6 +7,7 @@ import klj.project.web.dto.KljResponse;
 import klj.project.web.dto.code.CodeDto;
 import klj.project.web.dto.code.CodeRequestDto;
 import klj.project.web.dto.gym.GymLocationDto;
+import klj.project.web.dto.gym.TrainerDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,27 @@ public class GymController {
                     .create()
                     .succeed()
                     .buildWith(gymList);
+
+        } catch (Exception e) {
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR, "에러"))
+                    .buildWith(null);
+
+        }
+    }
+
+    @GetMapping (path="/search/trainer" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public KljResponse<List<TrainerDTO>>getTrainer(){
+        try {
+
+            List<TrainerDTO> trainerList = gymService.trainerList();
+
+            return KljResponse
+                    .create()
+                    .succeed()
+                    .buildWith(trainerList);
 
         } catch (Exception e) {
             log.info(e.toString());
