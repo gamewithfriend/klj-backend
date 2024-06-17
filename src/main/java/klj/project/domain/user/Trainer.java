@@ -36,8 +36,10 @@ public class Trainer {
 
     private Boolean trainerAcceptFlag;
 
+    private String trainerName;
+
     @Builder
-    public Trainer(User user, String employmentHistoryPeriod, String trainPlace, String trainPlacePostcode, String trainPlaceDetail, String trainPlaceName, String phoneNumber, String email, Boolean trainerApplyFlag, Boolean trainerAcceptFlag) {
+    public Trainer(User user, String employmentHistoryPeriod, String trainPlace, String trainPlacePostcode, String trainPlaceDetail, String trainPlaceName, String phoneNumber, String email, Boolean trainerApplyFlag, Boolean trainerAcceptFlag, String trainerName) {
         this.user = user;
         this.employmentHistoryPeriod = employmentHistoryPeriod;
         this.trainPlace = trainPlace;
@@ -48,6 +50,7 @@ public class Trainer {
         this.email = email;
         this.trainerApplyFlag = trainerApplyFlag;
         this.trainerAcceptFlag = trainerAcceptFlag;
+        this.trainerName = trainerName;
     }
 
     public static  Trainer createTrainer (User user, String employmentHistoryPeriod, String trainPlace, String trainPlaceDetail, String trainPlacePostcode, String trainPlaceName, String phoneNumber, String email, Boolean trainerApplyFlag, Boolean trainerAcceptFlag){
