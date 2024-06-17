@@ -45,24 +45,4 @@ public class GymController {
         }
     }
 
-    @GetMapping (path="/search/trainer" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public KljResponse<List<TrainerDTO>>getTrainer(){
-        try {
-
-            List<TrainerDTO> trainerList = gymService.trainerList();
-
-            return KljResponse
-                    .create()
-                    .succeed()
-                    .buildWith(trainerList);
-
-        } catch (Exception e) {
-            log.info(e.toString());
-            return KljResponse
-                    .create()
-                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR, "에러"))
-                    .buildWith(null);
-
-        }
-    }
 }

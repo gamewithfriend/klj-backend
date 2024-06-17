@@ -23,12 +23,6 @@ public class GymService {
         return gymLocationList;
     }
 
-    public List<TrainerDTO> trainerList(){
-        List<TrainerDTO> trainerList = gymQuerydslRepository.getTrainerList();
-
-        return trainerList;
-    }
-
 
 
 }
