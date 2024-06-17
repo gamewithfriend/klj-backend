@@ -24,7 +24,9 @@ public class GymQuerydslRepository {
         List<GymLocationDto> gymList = queryFactory
                 .select(Projections.fields(GymLocationDto.class,
                         trainer.trainPlace.as("address"),
-                        trainer.trainPlaceName.as("gymName")
+                        trainer.trainPlaceName.as("gymName"),
+                        trainer.trainerName.as("trainerName"),
+                        trainer.id.as("trainerId")
                         ))
                 .where(trainer.trainerAcceptFlag.eq(true))
                 .from(trainer)
@@ -32,16 +34,4 @@ public class GymQuerydslRepository {
         return gymList;
     }
 
-    public List<TrainerDTO> getTrainerList (){
-
-        List<TrainerDTO> trainerList = queryFactory
-                .select(Projections.fields(TrainerDTO.class,
-                        trainer.trainPlace.as("trainerName"),
-                        trainer.trainPlaceName.as("gymName")
-                ))
-                .where(trainer.trainerAcceptFlag.eq(true))
-                .from(trainer)
-                .fetch();
-        return trainerList;
-    }
 }

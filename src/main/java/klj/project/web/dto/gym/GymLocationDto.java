@@ -7,7 +7,9 @@ import lombok.Getter;
 @Data
 public class GymLocationDto {
 
+    private Long trainerId;
     private String address;
     private String gymName;
+    private String trainerName;
 
 }
