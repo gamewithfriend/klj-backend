@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -33,11 +35,13 @@ public class UserTrainerService {
         String trainPlaceName = userTrainerApplyDto.getTrainPlaceName();
         String phoneNumber = userTrainerApplyDto.getPhoneNumber();
         String email = userTrainerApplyDto.getEmail();
-
+        List<String> trainCategoryCodeList = userTrainerApplyDto.getTrainCategoryCodeList();
         Trainer trainer =null;
         if(loginUser.getTrainer() == null){ //트레이너 신청을 한번도 신청하지않았다면
             trainer = Trainer.createTrainer(loginUser, employmentHistoryPeriod, trainPlace, trainPlaceDetail, trainPlacePostcode, trainPlaceName, phoneNumber, email,true,false);
             userTrainerRepository.save(trainer);
+            Long trainerId = trainer.getId();
+
         }else { //트레이너 신청을 신청했다면
             trainer = loginUser.getTrainer();
             trainer.updateTrainerProfile(employmentHistoryPeriod, trainPlace, trainPlaceDetail, trainPlacePostcode, trainPlaceName, phoneNumber, email);
