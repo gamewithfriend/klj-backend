@@ -28,4 +28,29 @@ public class CodeQuerydslRepository {
         return codeList;
     }
 
+    public CodeDto getRegionCode(String area, String region) {
+
+
+        CodeDto parentCode = queryFactory
+                .select(Projections.fields(CodeDto.class,
+                        QCode.code.id
+                )).from(QCode.code)
+                .where(QCode.code.code.name.eq(area))
+                .fetchOne();
+
+        if(parentCode.getId().equals("region08")){
+            return parentCode;
+        }
+
+        CodeDto regionCode = queryFactory
+                .select(Projections.fields(CodeDto.class,
+                        QCode.code.id
+                )).from(QCode.code)
+                .where(QCode.code.code.name.eq(region)
+                        .and(QCode.code.codeParent.id.eq(parentCode.getId())))
+                .fetchOne();
+
+        return regionCode;
+
+    }
 }

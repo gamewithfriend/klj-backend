@@ -23,4 +23,9 @@ public class CodeService {
     }
 
 
+    public CodeDto getRegionCode(String area, String region) {
+        CodeDto regionCode = codeQuerydslRepository.getRegionCode(area, region);
+
+        return regionCode;
+    }
 }

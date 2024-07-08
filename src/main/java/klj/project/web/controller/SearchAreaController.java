@@ -6,6 +6,8 @@ import klj.project.web.dto.Error;
 import klj.project.web.dto.KljResponse;
 import klj.project.web.dto.code.CodeDto;
 import klj.project.web.dto.code.CodeRequestDto;
+import klj.project.web.dto.code.RegionCodeRequestDto;
+import klj.project.web.dto.gym.GymLocationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -44,5 +46,27 @@ public class SearchAreaController {
 
         }
     }
+
+    @PostMapping(path="/search/regionCode", produces = MediaType.APPLICATION_JSON_VALUE)
+    public KljResponse<CodeDto> getRegionCode(@RequestBody RegionCodeRequestDto reduxRegionDto) {
+        try {
+            String area = reduxRegionDto.getArea();
+            String region = reduxRegionDto.getRegion();
+            CodeDto regionCode = codeService.getRegionCode(area, region);
+
+            return KljResponse
+                    .create()
+                    .succeed()
+                    .buildWith(regionCode);
+
+        } catch (Exception e) {
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR, "에러"))
+                    .buildWith(null);
+        }
+    }
+
 
 }
