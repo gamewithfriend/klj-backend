@@ -1,5 +1,6 @@
 package klj.project.web.dto.user;
 
+import klj.project.web.dto.gym.TrainerCategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,7 +16,7 @@ public class UserTrainerAppplyDto {
     private String trainPlaceDetail;
     private String trainPlacePostcode;
     private String trainPlaceName;
-    private List<String> trainCategoryCodeList;
+    private List<TrainerCategoryDto> trainCategoryCodeList;
     private String email;
 
 

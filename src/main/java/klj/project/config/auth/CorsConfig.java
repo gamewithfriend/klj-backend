@@ -13,9 +13,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000"); // 로컬
-        config.addAllowedOrigin("http://43.202.127.161:3000"); // 프론트 IPv4 주소
-        config.addAllowedOrigin("http://172.31.42.174:3000"); // 프론트 IPv4 주소
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 

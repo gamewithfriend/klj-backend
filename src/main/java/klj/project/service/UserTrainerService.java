@@ -7,6 +7,7 @@ import klj.project.repository.UserTrainerRepository;
 import klj.project.strategyPattern.context.NoticeContext;
 import klj.project.strategyPattern.strategy.SendInnerNoticeAdmin;
 import klj.project.strategyPattern.strategy.SendOuterNoticeEmail;
+import klj.project.web.dto.gym.TrainerCategoryDto;
 import klj.project.web.dto.user.UserTrainerAppplyDto;
 import klj.project.web.dto.user.UserTrainerResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class UserTrainerService {
         String trainPlaceName = userTrainerApplyDto.getTrainPlaceName();
         String phoneNumber = userTrainerApplyDto.getPhoneNumber();
         String email = userTrainerApplyDto.getEmail();
-        List<String> trainCategoryCodeList = userTrainerApplyDto.getTrainCategoryCodeList();
+        List<TrainerCategoryDto> trainCategoryCodeList = userTrainerApplyDto.getTrainCategoryCodeList();
         Trainer trainer =null;
         if(loginUser.getTrainer() == null){ //트레이너 신청을 한번도 신청하지않았다면
             trainer = Trainer.createTrainer(loginUser, employmentHistoryPeriod, trainPlace, trainPlaceDetail, trainPlacePostcode, trainPlaceName, phoneNumber, email,true,false);

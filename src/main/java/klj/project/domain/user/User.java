@@ -1,6 +1,7 @@
 package klj.project.domain.user;
 
 import jakarta.persistence.*;
+import klj.project.domain.file.FileGroup;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,10 @@ public class User {
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_group_id" , nullable = true)
+    private FileGroup fileGroup;
+
     @Builder
     public User(String oauthId, OauthType oauthType, Authority authority, String nickName) {
         this.oauthId = oauthId;
@@ -57,5 +62,11 @@ public class User {
         this.nickName = nickName;
         return this;
     }
+
+    public User changeImage (FileGroup fileGroup){
+        this.fileGroup = fileGroup;
+        return this;
+    }
+
 
 }
