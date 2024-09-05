@@ -7,7 +7,7 @@ import klj.project.web.dto.KljResponse;
 import klj.project.web.dto.code.CodeDto;
 import klj.project.web.dto.code.CodeRequestDto;
 import klj.project.web.dto.gym.GymLocationDto;
-import klj.project.web.dto.gym.TrainerDTO;
+import klj.project.web.dto.gym.TrainerRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
@@ -45,5 +46,37 @@ public class GymController {
         }
     }
 
+    @PostMapping (path="/search/trainer" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public KljResponse<List<GymLocationDto>>getTrainer(@RequestBody TrainerRequestDto trainerRequestDto){
+        try {
+
+            List<String> category = trainerRequestDto.getCategory();
+            String trainingArea = trainerRequestDto.getTrainingArea();
+            int personCnt = trainerRequestDto.getPersonCnt();
+            String trainingTime = trainerRequestDto.getTrainingTime();
+
+//            List<String> categoryList = new ArrayList<>();
+//            for(int i = 0 ; i < category.length ; i++){
+//                categoryList.add(category[i]);
+//            }
+
+            log.info("===================== categoryList" + category);
+
+            List<GymLocationDto> gymList = gymService.getTrainerList(category, trainingArea, personCnt, trainingTime);
+
+            return KljResponse
+                    .create()
+                    .succeed()
+                    .buildWith(gymList);
+
+        } catch (Exception e) {
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR, "에러"))
+                    .buildWith(null);
+
+        }
+    }
 
 }
