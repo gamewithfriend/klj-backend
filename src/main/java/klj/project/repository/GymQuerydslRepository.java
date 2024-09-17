@@ -1,30 +1,47 @@
 package klj.project.repository;
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import klj.project.domain.code.Code;
 import klj.project.domain.user.*;
-import klj.project.web.dto.code.CodeDto;
 import klj.project.web.dto.gym.GymLocationDto;
-import klj.project.web.dto.gym.TrainerDto;
-import klj.project.web.dto.gym.TrainerRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
+import java.time.LocalTime;
 import java.util.List;
 
 import static klj.project.domain.code.QCode.code;
 import static klj.project.domain.user.QTrainer.*;
 import static klj.project.domain.user.QTrainerCategory.*;
-import static klj.project.domain.user.QTrainerCategoryId.*;
 
 @Repository
 @RequiredArgsConstructor
 public class GymQuerydslRepository {
 
     private final JPAQueryFactory queryFactory;
+    private BooleanExpression categoryIn(List<String> category){
+        if(category.size() > 0){
+            return QTrainerCategoryId.trainerCategoryId.trainerCategoryCode.id.in(category);
+        }
+        return null;
+    }
+
+    private BooleanExpression memberNumberLoe(int personCnt){
+        if(personCnt > 0){
+            return (QTrainerMemberNumber.trainerMemberNumber.trainerMemberNumberId.trainerMemberNumber.loe(personCnt));
+        }
+        return null;
+    }
+
+    private BooleanExpression trainingAreaContains(String trainingArea){
+        if(trainingArea.equals("")){
+            return (trainer.trainPlace.contains(trainingArea));
+        }
+        return null;
+    }
+
 
     public List<GymLocationDto> getGymList (){
 
@@ -42,21 +59,38 @@ public class GymQuerydslRepository {
     }
 
 
-    public List<GymLocationDto> getTrainerList(List<String> category, String trainingArea, int personCnt, String trainingTime) {
+    public List<GymLocationDto> getTrainerList(List<Code> category, String trainingArea, long personCnt, LocalTime startTime, LocalTime endTime) {
+
+        QTrainerTime trainerTime = QTrainerTime.trainerTime;
+        BooleanExpression timeCondition = trainerTime.trainerTimeId.trainerTime.between(startTime, endTime);
+
+        List<String> areaName = queryFactory
+                .select(code.name)
+                .from(code)
+                .where(code.id.eq(trainingArea.substring(0,8)))
+                .fetch();
+
+        List<String> regionName = queryFactory
+                .select(code.name)
+                .from(code)
+                .where(code.id.eq(trainingArea))
+                .fetch();
 
         List<Long> trainerIdList = queryFactory.
                 selectDistinct(trainer.id.as("trainerId"))
                     .from(trainer)
                 .join(trainerCategory).on(trainer.id.eq(trainerCategory.trainerCategoryId.trainer.id))
                 .join(QTrainerTime.trainerTime).on(trainer.id.eq(QTrainerTime.trainerTime.trainerTimeId.trainerId))
-                .join(QTrainerMemberNumber.trainerMemberNumber).on(trainer.id.eq(QTrainerMemberNumber.trainerMemberNumber.trainerMemberNumberId.trainerId))
-                .where(QTrainerCategoryId.trainerCategoryId.trainerCategoryCode.id.in(category)
-                        ,(QTrainerMemberNumber.trainerMemberNumber.trainerMemberNumberId.trainerMemberNumber.loe(personCnt))
-                        ,(trainer.trainPlace.contains(trainingArea)
-                        ))
+                .join(QTrainerMemberNumber.trainerMemberNumber).on(trainer.id.eq(QTrainerMemberNumber.trainerMemberNumber.trainerMemberNumberId.trainer.id))
+                .where(
+                        !category.isEmpty() ? trainerCategory.trainerCategoryId.trainerCategoryCode.in(category) : null,
+                        trainer.trainPlace.contains(areaName.get(0) + " " + regionName.get(0)),
+                        QTrainerMemberNumber.trainerMemberNumber.trainerMemberNumberId.trainerMemberNumber.loe(personCnt),
+                        timeCondition
+                )
                 .fetch();
 
-        System.out.println("======================= trainerIdList" + trainerIdList);
+        System.out.println("==============trainerIdList : " + trainerIdList);
 
         List<GymLocationDto> gymList = queryFactory
                 .select(Projections.fields(GymLocationDto.class,
