@@ -3,11 +3,11 @@ package klj.project.service;
 import klj.project.domain.code.Code;
 import klj.project.repository.GymQuerydslRepository;
 import klj.project.web.dto.gym.GymLocationDto;
-import klj.project.web.dto.gym.TrainerRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 @RequiredArgsConstructor
 @Service
@@ -23,8 +23,8 @@ public class GymService {
     }
 
 
-    public List<GymLocationDto> getTrainerList(List<String> category, String trainingArea, int personCnt, String trainingTime) {
-        List<GymLocationDto> gymLocationList = gymQuerydslRepository.getTrainerList(category, trainingArea, personCnt, trainingTime);
+    public List<GymLocationDto> getTrainerList(List<Code> category, String trainingArea, long personCnt, LocalTime startTime, LocalTime endTime) {
+        List<GymLocationDto> gymLocationList = gymQuerydslRepository.getTrainerList(category, trainingArea, personCnt, startTime, endTime);
 
         return gymLocationList;
 

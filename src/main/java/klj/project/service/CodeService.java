@@ -17,8 +17,7 @@ public class CodeService {
 
     public List<CodeDto> getCodeList(String codeId){
         List<CodeDto> codeDtoList = codeQuerydslRepository.findByCodeId(codeId);
-
-        log.info("codeDtoList info response: list", codeDtoList);
+        
         return codeDtoList;
     }
 
