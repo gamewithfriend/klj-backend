@@ -1,25 +1,21 @@
 package klj.project.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import klj.project.domain.notice.Notice;
 import klj.project.domain.user.User;
 import klj.project.repository.UserRepository;
 import klj.project.service.NoticeService;
 import klj.project.web.dto.Error;
 import klj.project.web.dto.KljResponse;
-import klj.project.web.dto.notice.NoticeListDeleteRequestDto;
 import klj.project.web.dto.notice.NoticeListDto;
 import klj.project.web.dto.notice.NoticeListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

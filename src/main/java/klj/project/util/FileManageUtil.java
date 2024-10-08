@@ -1,9 +1,13 @@
 package klj.project.util;
 
+import jakarta.annotation.PostConstruct;
 import klj.project.domain.file.FileGroup;
 import klj.project.domain.file.FileType;
 import klj.project.domain.file.Files;
 import klj.project.repository.FileRepository;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -13,21 +17,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class FileManageUtil {
+
+    private static String FILE_LOCAL_PATH;
 
     static String os = System.getProperty("os.name").toLowerCase();
     static String FILE_PATH = "";
 
+    @Value("${file.path}")
+    private  String fileLocalPath;
 
+    // @PostConstruct를 사용하여 static 변수 초기화
+    @PostConstruct
+    public void init() {
+        FILE_LOCAL_PATH = fileLocalPath;
+    }
 
-    public static List<Files> saveFiles(MultipartFile[] flles, FileGroup fileGroup)	throws Exception{
+    public static String getFileLocalPath() {
+        return FILE_LOCAL_PATH;
+    }
 
+    public static List<Files> saveFiles(MultipartFile[] flles, FileGroup fileGroup, FileType fileType)	throws Exception{
+        String localFileType = "";
         List<Files> fileList = new ArrayList<Files>();
         String saveFileName = UUID.randomUUID().toString().replace("-", "");
         String savePath = fileGroup.getGroupCategory().toString();
 
         if (os.contains("win")) {
-            FILE_PATH = "C:"+ File.separator+"java"+File.separator+"file";
+            FILE_PATH = FILE_LOCAL_PATH+ File.separator+"java"+File.separator+"file";
+            localFileType = "."+fileType;
         } else if (os.contains("linux")) {
             FILE_PATH = "/home/ec2-user/file";
         }
@@ -35,7 +54,7 @@ public class FileManageUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formattedDateTime = localDateTime.format(formatter);
         for (MultipartFile multipartFile : flles) {
-            File saveFile = new File(FILE_PATH+File.separator+savePath+File.separator+formattedDateTime, saveFileName);
+            File saveFile = new File(FILE_PATH+File.separator+savePath+File.separator+formattedDateTime, saveFileName+localFileType);
 
             // 실제 파일 저장
             saveFile.mkdirs();
@@ -43,10 +62,10 @@ public class FileManageUtil {
 
             // 저장정보 file Domain  변경
 
-            Files file = new Files(FileType.jpg
+            Files file = new Files(fileType
                     ,multipartFile.getOriginalFilename()
-                    ,saveFileName
-                    ,FILE_PATH+File.separator+savePath+File.separator+formattedDateTime+File.separator+saveFileName
+                    ,saveFileName+localFileType
+                    ,FILE_PATH+File.separator+savePath+File.separator+formattedDateTime+File.separator+saveFileName+localFileType
                     ,multipartFile.getSize()
                     ,localDateTime
                     ,fileGroup);
@@ -57,15 +76,19 @@ public class FileManageUtil {
     }
 
     public static List<Files> deleteFiles(List<Files> files)	throws Exception{
-
+        String localFileType = "";
         if (os.contains("win")) {
             FILE_PATH = "C:"+ File.separator+"java"+File.separator+"file";
+
         } else if (os.contains("linux")) {
             FILE_PATH = "/home/ec2-user/file";
         }
 
         for (Files  fileDomain : files) {
-            File file=new File(fileDomain.getFilePath());
+            if (os.contains("win")) {
+                localFileType = "."+fileDomain.getFileType();
+            }
+            File file=new File(fileDomain.getFilePath()+localFileType);
             file.delete();
         }
 

@@ -13,20 +13,20 @@ import klj.project.repository.UserRepository;
 import klj.project.util.FileManageUtil;
 import klj.project.web.dto.Error;
 import klj.project.web.dto.KljResponse;
-import klj.project.web.dto.user.UserInfoUpdateDto;
 import klj.project.web.dto.user.UserLoginDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -87,13 +87,13 @@ public class UserController {
                 fileRepository.deleteAll(files);
                 FileGroup fileGroup = new FileGroup(FileCategory.profile,"프로필사진",currentDateTime);
                 fileGroupRepository.save(fileGroup);
-                List<Files> filesInsertList = FileManageUtil.saveFiles(multipartFiles, fileGroup);
+                List<Files> filesInsertList = FileManageUtil.saveFiles(multipartFiles, fileGroup,FileType.jpg);
                 fileRepository.saveAll(filesInsertList);
                 loginUser.changeImage(fileGroup);
             }else {
                 FileGroup fileGroup = new FileGroup(FileCategory.profile,"프로필사진",currentDateTime);
                 fileGroupRepository.save(fileGroup);
-                List<Files> filesInsertList = FileManageUtil.saveFiles(multipartFiles, fileGroup);
+                List<Files> filesInsertList = FileManageUtil.saveFiles(multipartFiles, fileGroup,FileType.jpg);
                 fileRepository.saveAll(filesInsertList);
                 loginUser.changeImage(fileGroup);
             }
