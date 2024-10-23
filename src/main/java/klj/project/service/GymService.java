@@ -29,4 +29,10 @@ public class GymService {
         return gymLocationList;
 
     }
+
+    public List<GymLocationDto> getTrainerListWithoutParam(String trainingArea) {
+        List<GymLocationDto> gymLocationList = gymQuerydslRepository.getTrainerList(trainingArea);
+
+        return gymLocationList;
+    }
 }

@@ -16,13 +16,15 @@ public class TrainerRequestDto {
     private int personCnt;
     private String startTime;
     private String endTime;
+    private boolean paramFlag;
 
-    public TrainerRequestDto(List<String> category, String trainingArea, int personCnt, String startTime, String endTime){
+    public TrainerRequestDto(List<String> category, String trainingArea, int personCnt, String startTime, String endTime, boolean paramFlag){
         this.category = category;
         this.trainingArea = trainingArea;
         this.personCnt = personCnt;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.paramFlag = paramFlag;
 
     }
 
