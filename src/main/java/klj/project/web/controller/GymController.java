@@ -42,13 +42,19 @@ public class GymController {
             long personCnt = trainerRequestDto.getPersonCnt();
             String tempStartTime = trainerRequestDto.getStartTime();
             String tempEndTime = trainerRequestDto.getEndTime();
+            boolean paramFlag = trainerRequestDto.isParamFlag();
 
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime startTime = LocalTime.parse(tempStartTime, timeFormatter);
             LocalTime endTime = LocalTime.parse(tempEndTime, timeFormatter);
 
+            List<GymLocationDto> gymList = new ArrayList<>();
 
-            List<GymLocationDto> gymList = gymService.getTrainerList(category, trainingArea, personCnt, startTime, endTime);
+            if(paramFlag){
+                gymList = gymService.getTrainerList(category, trainingArea, personCnt, startTime, endTime);
+            }else{
+                gymList = gymService.getTrainerListWithoutParam(trainingArea);
+            }
 
             log.info("===================== gymList : " + gymList.toString());
 

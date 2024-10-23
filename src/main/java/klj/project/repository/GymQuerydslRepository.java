@@ -108,4 +108,47 @@ public class GymQuerydslRepository {
         return gymList;
 
     }
+
+    public List<GymLocationDto> getTrainerList(String trainingArea) {
+        List<String> areaName = queryFactory
+                .select(code.name)
+                .from(code)
+                .where(code.id.eq(trainingArea.substring(0,8)))
+                .fetch();
+
+        List<String> regionName = queryFactory
+                .select(code.name)
+                .from(code)
+                .where(code.id.eq(trainingArea))
+                .fetch();
+
+        List<Long> trainerIdList = queryFactory.
+                selectDistinct(trainer.id.as("trainerId"))
+                .from(trainer)
+                .join(trainerCategory).on(trainer.id.eq(trainerCategory.trainerCategoryId.trainer.id))
+                .join(QTrainerTime.trainerTime).on(trainer.id.eq(QTrainerTime.trainerTime.trainerTimeId.trainerId))
+                .join(QTrainerMemberNumber.trainerMemberNumber).on(trainer.id.eq(QTrainerMemberNumber.trainerMemberNumber.trainerMemberNumberId.trainer.id))
+                .where(
+                        trainer.trainPlace.contains(areaName.get(0) + " " + regionName.get(0))
+                )
+                .fetch();
+
+        System.out.println("==============trainerIdList : " + trainerIdList);
+
+        List<GymLocationDto> gymList = queryFactory
+                .select(Projections.fields(GymLocationDto.class,
+                        trainer.trainPlace.as("address"),
+                        trainer.trainPlaceName.as("gymName"),
+                        trainer.trainerName.as("trainerName"),
+                        trainer.id.as("trainerId")
+                ))
+                .from(trainer)
+                .where(trainer.id.in(trainerIdList)
+                )
+                .fetch();
+
+
+        return gymList;
+
+    }
 }
