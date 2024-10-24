@@ -12,4 +12,8 @@ public class ChatRoomDtl {
 
     @EmbeddedId
     private ChatRoomDtlId chatRoomDtlId;
+
+    public ChatRoomDtl(ChatRoomDtlId chatRoomDtlId)  {
+        this.chatRoomDtlId = chatRoomDtlId;
+    }
 }

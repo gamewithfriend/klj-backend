@@ -15,15 +15,15 @@ public class Message {
 
     private MessageType type;
     private String content;
-    private long senderId;
-    private long chatRoomId;
+    private Long senderId;
+    private Long chatRoomId;
     private String timestamp;
 
     // 기본 생성자
     public Message() {}
 
     // 초기화 생성자
-    public Message(MessageType type, String content, long senderId, long chatRoomId, String timestamp) {
+    public Message(MessageType type, String content, Long senderId, Long chatRoomId, String timestamp) {
         this.type = type;
         this.content = content;
         this.senderId = senderId;

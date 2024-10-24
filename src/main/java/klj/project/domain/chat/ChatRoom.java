@@ -2,6 +2,7 @@ package klj.project.domain.chat;
 
 import jakarta.persistence.*;
 import klj.project.domain.user.User;
+import klj.project.web.dto.chat.ChatRoomDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,17 +25,23 @@ public class ChatRoom {
     private LocalDateTime createDate;
 
     @Builder
-    public ChatRoom (Long id, String chatRoomTitle, LocalDateTime createDate) {
-        this.id = id;
+    public ChatRoom (String chatRoomTitle, LocalDateTime createDate) {
         this.chatRoomTitle = chatRoomTitle;
         this.createDate = LocalDateTime.now();
     }
 
-    public static ChatRoom createChatRoom (Long id, String chatRoomTitle, LocalDateTime createDate) {
+    public static ChatRoom createChatRoom(String chatRoomTitle, LocalDateTime createDate) {
         return ChatRoom.builder()
-                .id(id)
                 .chatRoomTitle(chatRoomTitle)
-                .createDate(LocalDateTime.now())
+                .createDate(createDate)
                 .build();
+    }
+
+    public ChatRoomDto convertToDto() {
+        ChatRoomDto chatRoomDto = new ChatRoomDto();
+        chatRoomDto.setChatRoomId(this.id);
+        chatRoomDto.setChatRoomTitle(this.chatRoomTitle);
+
+        return chatRoomDto;
     }
 }
