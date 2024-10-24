@@ -50,9 +50,11 @@ public class GymQuerydslRepository {
                         trainer.trainPlace.as("address"),
                         trainer.trainPlaceName.as("gymName"),
                         trainer.trainerName.as("trainerName"),
-                        trainer.id.as("trainerId")
+                        trainer.id.as("trainerId"),
+                        QUser.user.id.as("userId")
                         ))
                 .where(trainer.trainerAcceptFlag.eq(true))
+                .join(QUser.user).on(QUser.user.trainer.id.eq(trainer.id))
                 .from(trainer)
                 .fetch();
         return gymList;
@@ -97,9 +99,11 @@ public class GymQuerydslRepository {
                         trainer.trainPlace.as("address"),
                         trainer.trainPlaceName.as("gymName"),
                         trainer.trainerName.as("trainerName"),
-                        trainer.id.as("trainerId")
+                        trainer.id.as("trainerId"),
+                        QUser.user.id.as("userId")
                 ))
                 .from(trainer)
+                .join(QUser.user).on(QUser.user.trainer.id.eq(trainer.id))
                 .where(trainer.id.in(trainerIdList)
                 )
                 .fetch();
@@ -140,9 +144,11 @@ public class GymQuerydslRepository {
                         trainer.trainPlace.as("address"),
                         trainer.trainPlaceName.as("gymName"),
                         trainer.trainerName.as("trainerName"),
-                        trainer.id.as("trainerId")
+                        trainer.id.as("trainerId"),
+                        QUser.user.id.as("userId")
                 ))
                 .from(trainer)
+                .join(QUser.user).on(QUser.user.trainer.id.eq(trainer.id))
                 .where(trainer.id.in(trainerIdList)
                 )
                 .fetch();

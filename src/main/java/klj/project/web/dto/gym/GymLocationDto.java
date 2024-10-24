@@ -11,5 +11,6 @@ public class GymLocationDto {
     private String address;
     private String gymName;
     private String trainerName;
+    private Long userId;
 
 }
