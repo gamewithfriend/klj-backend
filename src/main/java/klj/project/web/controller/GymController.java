@@ -1,6 +1,8 @@
 package klj.project.web.controller;
 
 import klj.project.domain.code.Code;
+import klj.project.domain.user.Trainer;
+import klj.project.repository.trainer.TrainerRepository;
 import klj.project.service.GymService;
 import klj.project.web.dto.Error;
 import klj.project.web.dto.KljResponse;
@@ -26,6 +28,8 @@ import java.util.List;
 public class GymController {
 
     private final GymService gymService;
+
+    private final TrainerRepository trainerRepository;
 
     @PostMapping (path="/search/trainer" , produces = MediaType.APPLICATION_JSON_VALUE)
     public KljResponse<List<GymLocationDto>>getTrainer(@RequestBody TrainerRequestDto trainerRequestDto){
@@ -77,8 +81,13 @@ public class GymController {
     @PostMapping (path="/search/trainer/detail" , produces = MediaType.APPLICATION_JSON_VALUE)
     public KljResponse<TrainerDetailResponseDto>getTrainerDetail(@RequestBody TrainerDetaiRequestlDto trainerRequestDetailDto){
         try {
+            Long trainerId = trainerRequestDetailDto.getTrainerId();
+            Trainer trainer = trainerRepository.getReferenceById(trainerId);
+            String trainPlace = trainer.getTrainPlace();
+            String trainerName = trainer.getTrainerName();
+            String trainPlaceName = trainer.getTrainPlaceName();
             log.info("===================== gymList : " );
-            TrainerDetailResponseDto trainerDetailResponseDto = new TrainerDetailResponseDto(1L,"","","");
+            TrainerDetailResponseDto trainerDetailResponseDto = new TrainerDetailResponseDto(trainerId,trainPlace,trainPlaceName,trainerName);
 
             return KljResponse
                     .create()
