@@ -1,10 +1,8 @@
-package klj.project.repository;
+package klj.project.repository.chat;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import klj.project.domain.chat.ChatMessage;
 import klj.project.domain.chat.QChatMessage;
-import klj.project.domain.code.QCode;
 import klj.project.web.dto.chat.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class ChatQuerydslRepository {
+public class ChatMessageQuerydslRepository {
 
     private final JPAQueryFactory queryFactory;
 
