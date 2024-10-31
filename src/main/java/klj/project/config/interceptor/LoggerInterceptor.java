@@ -1,55 +1,68 @@
 package klj.project.config.interceptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import klj.project.config.interceptor.util.CachedBodyHttpServletRequest;
 import klj.project.domain.user.User;
 import klj.project.domain.util.Logs;
 import klj.project.domain.util.LogsType;
 import klj.project.repository.LogsRepository;
 import klj.project.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import klj.project.web.dto.code.CodeRequestDto;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
+import java.io.BufferedReader;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class LoggerInterceptor implements HandlerInterceptor {
+
+
 
     private final LogsRepository logsRepository;
 
+    private final UserRepository userRepository;
+
+    public LoggerInterceptor(LogsRepository logsRepository, UserRepository userRepository) {
+        this.logsRepository = logsRepository;
+        this.userRepository = userRepository;
+    }
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request instanceof HttpServletRequest) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler ) throws Exception {
 
-            // 요청 본문을 캐싱하여 새로운 HttpServletRequest로 전달
-            CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(request);
-
-            // 본문을 한 번 읽음 (원하는 처리 수행 가능)
-            String body = IOUtils.toString(cachedBodyHttpServletRequest.getReader());
+        if(request.getQueryString() != null){
+            String requestURI = request.getRequestURI();
+            String[] requestUriArr = requestURI.split("/");
 
 
-            log.debug("===============================================");
-            log.debug("==================== BEGIN ====================");
-            log.debug("Request URI ===> " + request.getRequestURI());
-            //insert log
-            //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            User user = null;
-            /*if(authentication.getPrincipal() != null){
-                user = (User) authentication.getPrincipal();
-            }*/
+            String localAddr = request.getLocalAddr();
+            String queryString = request.getQueryString();
+            String[] queryStringArr = queryString.split("&");
 
-            Logs pointLogs = new Logs(user, LogsType.search, "검색데이터",request.getRemoteAddr());
+            String queryStringDetailUserId = queryStringArr[queryStringArr.length - 2];
+            String[] queryStringDetailUserIdArr = queryStringDetailUserId.split("=");
+            String queryStringUserIdValue = queryStringDetailUserIdArr[queryStringDetailUserIdArr.length - 1];
 
-            return true;
+            String queryStringDetailType = queryStringArr[queryStringArr.length - 1];
+            String[] queryStringDetailTypeArr = queryStringDetailType.split("=");
+            String queryStringTypeValue = queryStringDetailTypeArr[queryStringDetailTypeArr.length - 1];
+
+
+            LogsType logsType = LogsType.valueOf(queryStringTypeValue);
+            User loginUser = userRepository.getReferenceById(Long.parseLong(queryStringUserIdValue));
+
+            Logs logs = new Logs(loginUser,logsType,queryString,localAddr);
+            logsRepository.save(logs);
         }
-        return false;
+
+
+        return true;
 
 
     }

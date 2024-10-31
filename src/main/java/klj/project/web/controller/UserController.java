@@ -13,16 +13,16 @@ import klj.project.repository.UserRepository;
 import klj.project.util.FileManageUtil;
 import klj.project.web.dto.Error;
 import klj.project.web.dto.KljResponse;
+import klj.project.web.dto.gym.TrainerRequestDto;
+import klj.project.web.dto.user.UserInfoRequestDto;
+import klj.project.web.dto.user.UserInfoResponseDto;
 import klj.project.web.dto.user.UserLoginDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -103,6 +103,28 @@ public class UserController {
             return KljResponse.create()
                     .succeed()
                     .buildWith(userDto);
+        }catch (Exception e){
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR,"에러"))
+                    .buildWith(null);
+        }
+    }
+
+    @Operation(summary = "유저 개인정보", description = "todo: implementation")
+    @PostMapping(path = "/user/info",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public KljResponse<UserInfoResponseDto> userInfo(@RequestBody UserInfoRequestDto userInfoRequestDto) {
+        try {
+
+            Long id = userInfoRequestDto.getId();
+            User user = userRepository.getReferenceById(id);
+            String nickName = user.getNickName();
+            Long fileGroupId = user.getFileGroup().getId();
+
+            return KljResponse.create()
+                    .succeed()
+                    .buildWith(null);
         }catch (Exception e){
             log.info(e.toString());
             return KljResponse

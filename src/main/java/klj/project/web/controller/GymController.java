@@ -5,12 +5,13 @@ import klj.project.service.GymService;
 import klj.project.web.dto.Error;
 import klj.project.web.dto.KljResponse;
 import klj.project.web.dto.gym.GymLocationDto;
+import klj.project.web.dto.gym.TrainerDetaiRequestlDto;
+import klj.project.web.dto.gym.TrainerDetailResponseDto;
 import klj.project.web.dto.gym.TrainerRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +63,27 @@ public class GymController {
                     .create()
                     .succeed()
                     .buildWith(gymList);
+
+        } catch (Exception e) {
+            log.info(e.toString());
+            return KljResponse
+                    .create()
+                    .fail(new Error(HttpStatus.INTERNAL_SERVER_ERROR, "에러"))
+                    .buildWith(null);
+
+        }
+    }
+
+    @PostMapping (path="/search/trainer/detail" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public KljResponse<TrainerDetailResponseDto>getTrainerDetail(@RequestBody TrainerDetaiRequestlDto trainerRequestDetailDto){
+        try {
+            log.info("===================== gymList : " );
+            TrainerDetailResponseDto trainerDetailResponseDto = new TrainerDetailResponseDto(1L,"","","");
+
+            return KljResponse
+                    .create()
+                    .succeed()
+                    .buildWith(trainerDetailResponseDto);
 
         } catch (Exception e) {
             log.info(e.toString());
